@@ -1,266 +1,270 @@
-# Enterprise Research Agent - NVIDIA Edition
+# 🤖 Research Agent
 
-**Production-quality AI Research Agent** with LangGraph orchestration, tool-based research execution, and self-critique for portfolio-grade quality. **Now powered by NVIDIA AI Foundation Models API.**
+> A full-stack Multi-Agent AI Research Assistant built using **LangGraph, FastAPI, React, and NVIDIA Foundation Models**.
 
-## Overview
-
-The Enterprise Research Agent is a sophisticated agentic AI system that answers complex research questions through:
-
-1. **Planning** - Breaking down research questions into logical steps
-2. **Tool Execution** - Gathering data via search and analysis tools
-3. **Report Writing** - Synthesizing findings into comprehensive reports
-4. **Self-Critique** - Evaluating report quality and completeness
-5. **Rewriting** - Improving reports based on feedback
-
-This is **not** a chatbot—it's a production-ready research orchestration system demonstrating enterprise AI engineering practices.
+The application accepts a research question, plans the research workflow, executes tools, generates a structured research report, critiques its own output, and presents the final result through a modern React interface.
 
 ---
 
-## What's New: NVIDIA Migration ✨
+## 🚀 Features
 
-### Powered by NVIDIA AI Foundation Models
-- **LLM Provider**: NVIDIA AI Foundation Models (via OpenAI-compatible API)
-- **Default Model**: Meta Llama 2 70B Chat
-- **API Endpoint**: https://integrate.api.nvidia.com/v1
-- **Zero Breaking Changes**: Existing architecture, workflows, and tests remain unchanged
-
-### Migration Highlights
-- ✅ Complete NVIDIA API integration
-- ✅ OpenAI-compatible endpoint (drop-in replacement)
-- ✅ All agents (Planner, Writer, Critic, Rewriter) updated
-- ✅ Configuration moved to NVIDIA environment variables
-- ✅ No changes to LangGraph workflow or business logic
-- ✅ Full backward compatibility with existing test suite
+- Multi-Agent AI workflow using LangGraph
+- Planner, Writer, Critic, and Rewriter agents
+- FastAPI backend
+- React + Vite frontend
+- Research report generation
+- Markdown report rendering
+- REST API
+- Swagger API documentation
+- Modular architecture
+- Execution metrics dashboard
 
 ---
 
-## Architecture
+# 🏗 Architecture
 
 ```
-User Question
-    ↓
-Planner Agent (Plan Research) [NVIDIA LLM]
-    ↓
-Tool Executor (Search, Python, Analysis)
-    ↓
-Writer Agent (Synthesize Report) [NVIDIA LLM]
-    ↓
-Critic Agent (Evaluate Quality) [NVIDIA LLM]
-    ↓
-    ├→ PASS → Final Report
-    └→ FAIL → Rewriter Agent [NVIDIA LLM] → Final Report
+                User
+                  │
+                  ▼
+         React Frontend (Vite)
+                  │
+                  ▼
+          FastAPI REST API
+                  │
+                  ▼
+          LangGraph Workflow
+                  │
+     ┌────────────┴────────────┐
+     ▼                         ▼
+ Planner Agent          Tool Executor
+                              │
+             ┌────────────────┼───────────────┐
+             ▼                ▼               ▼
+        Search Tool      Python Tool   Analysis Tool
+                              │
+                              ▼
+                       Writer Agent
+                              │
+                              ▼
+                       Critic Agent
+                              │
+                  PASS ───────┴────── FAIL
+                     │                │
+                     ▼                ▼
+               Final Report     Rewriter Agent
+                                      │
+                                      ▼
+                                Final Report
 ```
-
-### Core Components
-
-- **Planner Agent**: Breaks questions into executable tasks using NVIDIA LLM
-- **Search Tool**: Tavily-based web search for research data
-- **Python Tool**: Safe code execution for calculations and analysis
-- **Analysis Tool**: Data aggregation and comparison
-- **Writer Agent**: Report generation with NVIDIA LLM
-- **Critic Agent**: Quality evaluation using NVIDIA LLM
-- **Rewriter Agent**: Improvement based on feedback via NVIDIA LLM
-- **LangGraph Orchestrator**: Workflow coordination and state management
 
 ---
 
-## Installation
+# ⚙️ Tech Stack
 
-### Prerequisites
-- Python 3.11+
-- NVIDIA API key (from https://build.nvidia.com)
-- Tavily Search API key
+## Backend
 
-### Setup
+- Python
+- FastAPI
+- LangGraph
+- LangChain
+- Pydantic
 
-1. **Clone repository**
+## Frontend
+
+- React
+- Vite
+- Axios
+- React Markdown
+- Tailwind CSS
+
+## AI
+
+- NVIDIA Foundation Models
+- Prompt Engineering
+- Multi-Agent Workflow
+
+---
+
+# 📂 Project Structure
+
+```
+research-agent/
+
+├── app/
+│   ├── agents/
+│   ├── api/
+│   ├── graph/
+│   ├── prompts/
+│   ├── tools/
+│   └── utils/
+│
+├── frontend/
+│
+├── tests/
+│
+├── README.md
+│
+└── requirements.txt
+```
+
+---
+
+# ✨ Workflow
+
+1. User submits a research question.
+2. Planner Agent creates an execution plan.
+3. Tool Executor gathers relevant information.
+4. Writer Agent generates a structured report.
+5. Critic Agent evaluates report quality.
+6. If needed, the Rewriter Agent improves the report.
+7. Final report is displayed in the React frontend.
+
+---
+
+# 📦 Installation
+
+## Clone Repository
+
 ```bash
-git clone https://github.com/rishikesh0012/research-agent-.git
+git clone git@github.com:rishikesh0012/research-agent-.git
 cd research-agent-
 ```
 
-2. **Create virtual environment**
+## Backend Setup
+
 ```bash
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+source venv/bin/activate
 ```
 
-3. **Install dependencies**
 ```bash
 pip install -r requirements.txt
 ```
 
-4. **Configure environment**
-```bash
-cp .env.example .env
-# Edit .env with your API keys
-export NVIDIA_API_KEY="nvapi-your-key"
-export NVIDIA_MODEL="meta/llama-2-70b-chat"
-export NVIDIA_BASE_URL="https://integrate.api.nvidia.com/v1"
-export TAVILY_API_KEY="tvly-your-key"
-```
+Create a `.env` file and configure:
 
----
-
-## Configuration
-
-### Environment Variables
-
-```bash
-# NVIDIA API Configuration
-NVIDIA_API_KEY=nvapi-your-api-key-here
-NVIDIA_MODEL=meta/llama-2-70b-chat
+```env
+NVIDIA_API_KEY=your_key
+NVIDIA_MODEL=your_model
 NVIDIA_BASE_URL=https://integrate.api.nvidia.com/v1
-
-# Tavily Search
-TAVILY_API_KEY=tvly-...
-
-# Application
-DEBUG=false
-LOG_LEVEL=INFO
-
-# LangSmith (Optional)
-LANGSMITH_ENABLED=false
-LANGSMITH_API_KEY=...
-LANGSMITH_PROJECT=...
-
-# Server
-FASTAPI_HOST=0.0.0.0
-FASTAPI_PORT=8000
-FASTAPI_RELOAD=true
+TAVILY_API_KEY=your_key
 ```
 
-### Available NVIDIA Models
-
-You can use any model available in the NVIDIA catalog:
-- `meta/llama-2-70b-chat` (default)
-- `mistralai/mistral-large`
-- `mistralai/mistral-medium`
-- `mistralai/mixtral-8x7b-instruct-v0.1`
-- And more from https://build.nvidia.com/explore/discover
-
----
-
-## Running Locally
-
-### Start the server
+Run the backend
 
 ```bash
 uvicorn app.main:app --reload
 ```
 
-Server runs at `http://localhost:8000`
+Backend
 
-### Interactive API Documentation
-
-- **Swagger UI**: http://localhost:8000/docs
-- **ReDoc**: http://localhost:8000/redoc
-
----
-
-## API Examples
-
-### 1. Execute Research Task
-
-```bash
-curl -X POST "http://localhost:8000/api/v1/research" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "question": "Compare LangGraph and CrewAI for production AI agents",
-    "max_retries": 1,
-    "timeout_seconds": 300
-  }'
+```
+http://localhost:8000
 ```
 
-### 2. Get Research Status
+Swagger
 
-```bash
-curl "http://localhost:8000/api/v1/research/{state_id}"
 ```
-
-### 3. Get Metrics
-
-```bash
-curl "http://localhost:8000/api/v1/metrics"
-```
-
-### 4. Health Check
-
-```bash
-curl "http://localhost:8000/api/v1/health"
+http://localhost:8000/docs
 ```
 
 ---
 
-## Testing
+## Frontend Setup
 
-### Run all tests
 ```bash
-pytest -v
+cd frontend
 ```
 
-### Run with coverage
 ```bash
-pytest --cov=app --cov-report=html
+npm install
+```
+
+```bash
+npm run dev
+```
+
+Frontend
+
+```
+http://localhost:5173
 ```
 
 ---
 
-## Code Quality
+# 📡 API Endpoint
 
-- ✅ **Type Hints**: Full type annotations throughout
-- ✅ **Pydantic Models**: Strongly-typed data structures
-- ✅ **Error Handling**: Comprehensive exception handling
-- ✅ **Logging**: Rich-formatted structured logging
-- ✅ **SOLID Principles**: Modular, reusable components
-- ✅ **NVIDIA Integration**: Seamless API integration
+### POST
 
----
+```
+/api/v1/research
+```
 
-## NVIDIA Migration Summary
+Example
 
-### Files Modified
-
-| File | Changes |
-|------|----------|
-| `app/config.py` | Replaced OpenAI settings with NVIDIA API configuration |
-| `app/agents/__init__.py` | Updated all agents to use NVIDIA LLM via OpenAI-compatible API |
-| `.env.example` | Replaced OpenAI env vars with NVIDIA equivalents |
-| `app/production.py` | Added NVIDIA model logging |
-| `README.md` | Updated documentation for NVIDIA |
-
-### No Breaking Changes
-
-- ✅ LangGraph workflow unchanged
-- ✅ FastAPI endpoints unchanged
-- ✅ Prompt templates unchanged
-- ✅ Tool implementations unchanged
-- ✅ Evaluation system unchanged
-- ✅ All tests pass
+```json
+{
+  "question": "Compare RAG, Fine-Tuning and AI Agents",
+  "max_retries": 1,
+  "timeout_seconds": 300
+}
+```
 
 ---
 
-## License
+# 📸 Screenshots
 
-MIT License - see LICENSE file for details
+### Home Page
 
----
+_Add screenshot_
 
-## Author
+### Research Report
 
-**Rishikesh KG** - AI Engineer & Senior Software Architect
+_Add screenshot_
 
----
+### Swagger API
 
-## Resources
-
-- [NVIDIA AI Foundation Models](https://build.nvidia.com)
-- [LangGraph Documentation](https://langchain-ai.github.io/langgraph/)
-- [LangChain Documentation](https://python.langchain.com/)
-- [FastAPI Documentation](https://fastapi.tiangolo.com/)
-- [Tavily Search API](https://tavily.com/)
+_Add screenshot_
 
 ---
 
-**Built with production-quality AI engineering practices** ✨
-**Now powered by NVIDIA AI Foundation Models** 🚀
+# 🔮 Future Improvements
+
+- Streaming responses
+- Citation support
+- Multiple search providers
+- PDF export
+- Authentication
+- Docker deployment
+- CI/CD pipeline
+- Cloud deployment
+
+---
+
+# 🧪 Testing
+
+```bash
+pytest
+```
+
+---
+
+# 📄 License
+
+MIT License
+
+---
+
+# 👨‍💻 Author
+
+**Rishikesh KG**
+
+AI Engineer | Generative AI | Machine Learning | Full-Stack AI Development
+
+GitHub: https://github.com/rishikesh0012
+
+---
+
+⭐ If you found this project useful, consider giving it a star.
